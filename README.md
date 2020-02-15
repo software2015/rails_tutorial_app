@@ -9,10 +9,10 @@
 
 ### Steps for running the app:
 
-1. bundle install
-2. rails db:create
-3. rails db:migrate
-4. rails server
+	1. bundle install
+	2. rails db:create
+	3. rails db:migrate
+	4. rails server
 
 ### Additional settings
-1.	rails test # run auto tests with Minitest
+	1.	rails test # run auto tests with Minitest
