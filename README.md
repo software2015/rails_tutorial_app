@@ -15,4 +15,4 @@
 	4. rails server
 
 ### Additional settings
-	1.	rails test # run auto tests with Minitest
+	1. rails test # run auto tests with Minitest
