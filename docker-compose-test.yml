@@ -1,0 +1,42 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:14.4-alpine'
+    volumes:
+      - '~/docker/volumes/social_network/test/postgresql:/var/lib/postgresql/data'
+    # Database name, user name, user password are taken from those environment variables.
+    # Database is created there and no need to run rails db:create.
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=social_network_test
+      - POSTGRES_USER=social_network_test
+      - POSTGRES_PASSWORD=social_network_test
+    hostname: 'postgres'
+    expose:
+      - '5432'
+    ports:
+      - '5432:5432'
+
+  social_network_app:
+    build:
+      dockerfile: Dockerfile.test
+      context: ./
+    volumes:
+      - '/social_network_app/node_modules'
+      - './:/social_network_app'
+    environment:
+      - RAILS_ENV=development
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=social_network_test
+      - POSTGRES_USER=social_network_test
+      - POSTGRES_PASSWORD=social_network_test
+    hostname: 'social_network_app'
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    restart: on-failure
+    command: sh -c '. ~/.bashrc && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails test --verbose | tee -a ./log/minitest-test.log'
